@@ -1,5 +1,5 @@
 const time = {
-    active: false,
+    setInterval: null,
     secondTens: 0,
     secondOnes: 0,
     msHundreds: 0,
@@ -14,11 +14,8 @@ const updateTime = () => {
     return;
 }
 
-const go = () => {
-    setInterval(() => {
-        if (!time.active) return;
-
-        if (time.secondTens >= 1) {
+const runner = () => {
+    if (time.secondTens >= 1) {
             document.querySelector('.digits').style = "color: red";
             return;
         }
@@ -47,7 +44,6 @@ const go = () => {
             updateTime();
             return;
         }
-    }, 10);    
 }
 
 const buttons = document.querySelector('.buttons');
@@ -61,14 +57,14 @@ buttons.appendChild(start);
 buttons.appendChild(reset);
 
 start.addEventListener('click', (e) => {
-    time.active = true;
     e.target.setAttribute('disabled', true);
-    go();
+    time.setInterval = setInterval(runner, 10);
 });
 
 reset.addEventListener('click', (e) => {
     document.querySelector('.digits').style = "color: black";
-    time.active = false;
+    clearInterval(time.setInterval);
+    time.setInterval = null;
     time.secondTens = 0;
     time.secondOnes = 0;
     time.msHundreds = 0;
